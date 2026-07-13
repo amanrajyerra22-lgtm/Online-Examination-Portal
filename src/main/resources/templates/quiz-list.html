@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Exam Portal - Available Quizzes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f6;
+            color: #333;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .navbar h1 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .header-area h2 {
+            color: #1e3c72;
+            font-size: 28px;
+        }
+        .btn-back {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            background: #cbd5e0;
+        }
+        .error-banner {
+            background-color: #fed7d7;
+            border: 1px solid #f5c6cb;
+            color: #9b2c2c;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .quiz-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+        .quiz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .quiz-title {
+            font-size: 20px;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .quiz-desc {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            height: 60px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        .meta-info {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #718096;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-start {
+            display: block;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-start:hover {
+            opacity: 0.9;
+            box-shadow: 0 4px 12px rgba(30, 60, 114, 0.3);
+        }
+        .no-quizzes {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 12px;
+            color: #718096;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <a th:href="@{/dashboard}"><h1>🎓 Online Exam Portal</h1></a>
+</div>
+
+<div class="container">
+    <div class="header-area">
+        <h2>Available Exams</h2>
+        <a th:href="@{/dashboard}" class="btn-back">Back to Dashboard</a>
+    </div>
+
+    <!-- Error if quiz has no questions -->
+    <div th:if="${param.error_no_questions}" class="error-banner">
+        ⚠️ Unable to start quiz: The selected quiz does not contain any questions yet.
+    </div>
+
+    <div th:if="${quizzes.empty}" class="no-quizzes">
+        <h3>No quizzes are currently available.</h3>
+        <p>Please check back later or contact your instructor.</p>
+    </div>
+
+    <div th:unless="${quizzes.empty}" class="quiz-grid">
+        <div th:each="quiz : ${quizzes}" class="quiz-card">
+            <div>
+                <div class="quiz-title" th:text="${quiz.title}">Quiz Title</div>
+                <div class="quiz-desc" th:text="${quiz.description}">Quiz Description</div>
+            </div>
+            <div>
+                <div class="meta-info">
+                    <div class="meta-item">
+                        <span>⏱️</span>
+                        <strong th:text="${quiz.timeLimitInMinutes + ' Mins'}">0 Mins</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span>❓</span>
+                        <strong th:text="${quiz.questions.size() + ' Ques'}">0 Ques</strong>
+                    </div>
+                    <div class="meta-item" style="grid-column: span 2;">
+                        <span>🎯</span>
+                        <span>Passing score: <strong th:text="${quiz.passPercentage + '%'}">0%</strong></span>
+                    </div>
+                </div>
+                <a th:href="@{'/quizzes/' + ${quiz.id} + '/take'}" class="btn-start">Start Exam</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,207 @@
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Exam Portal - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f6;
+            color: #333;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .navbar h1 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .user-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .btn-logout {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-logout:hover {
+            background: white;
+            color: #1e3c72;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .welcome-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid #1e3c72;
+        }
+        .welcome-section h2 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            color: #1e3c72;
+        }
+        .welcome-section p {
+            color: #666;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+        }
+        .card h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        .card p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        .btn-action {
+            display: inline-block;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-action:hover {
+            opacity: 0.9;
+            box-shadow: 0 4px 12px rgba(30, 60, 114, 0.3);
+        }
+        .stats-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            flex: 1;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3c72;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <h1>🎓 Online Exam Portal</h1>
+    <div class="nav-links">
+        <span class="user-badge" th:text="${currentUser.firstName + ' ' + currentUser.lastName + ' (' + currentUser.role + ')'}">User (Role)</span>
+        <form method="post" th:action="@{/logout}">
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
+    </div>
+</div>
+
+<div class="main-container">
+    <div class="welcome-section">
+        <h2 th:text="${'Welcome back, ' + currentUser.firstName + '!'}">Welcome back!</h2>
+        <p>Manage your quizzes, review submissions, or check your performance history here.</p>
+    </div>
+
+    <!-- Teacher Dashboard -->
+    <div th:if="${currentUser.role == T(com.oep.online_examination_portal.entity.Role).TEACHER}" class="dashboard-grid">
+        <div class="card">
+            <div>
+                <h3>📋 Quiz Management</h3>
+                <p>Create, update, and remove exams. Add multiple choice questions, set time limits, and set passing criteria.</p>
+            </div>
+            <a th:href="@{/teacher/quizzes}" class="btn-action">Manage Quizzes</a>
+        </div>
+
+        <div class="card">
+            <div>
+                <h3>✍️ Exam Submissions</h3>
+                <p>Check the list of all student submissions, view details of user answers, scores, and passing statuses.</p>
+            </div>
+            <a th:href="@{/teacher/submissions}" class="btn-action">View Submissions</a>
+        </div>
+    </div>
+
+    <!-- Student Dashboard -->
+    <div th:if="${currentUser.role == T(com.oep.online_examination_portal.entity.Role).STUDENT}" class="dashboard-grid">
+        <div class="card">
+            <div>
+                <h3>📝 Take Exam</h3>
+                <p>Browse through the list of active exams. Check durations and starting guidelines before attempting the quizzes.</p>
+            </div>
+            <a th:href="@{/quizzes}" class="btn-action">Available Quizzes</a>
+        </div>
+
+        <div class="card">
+            <div>
+                <h3>📊 Performance History</h3>
+                <p>Track your scores, view detailed reports of your past attempts, and see which questions you answered correctly.</p>
+            </div>
+            <a th:href="@{/history}" class="btn-action">Exam History</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

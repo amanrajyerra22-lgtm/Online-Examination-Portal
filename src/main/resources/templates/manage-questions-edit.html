@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Exam Portal - Edit Question</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f6;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 40px;
+        }
+        .form-card h2 {
+            color: #1e3c72;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #1e3c72;
+            background-color: #fff;
+            box-shadow: 0 0 8px rgba(30, 60, 114, 0.2);
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            font-size: 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <a th:href="@{/dashboard}"><h1>🎓 Online Exam Portal</h1></a>
+</div>
+
+<div class="container">
+    <div class="form-card">
+        <h2>✏️ Edit Question Details</h2>
+        
+        <form method="post" th:object="${question}">
+            <div class="form-group">
+                <label for="content">Question content</label>
+                <textarea id="content" th:field="*{content}" required rows="4" placeholder="Enter question statement here..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="optionA">Option A</label>
+                <input type="text" id="optionA" th:field="*{optionA}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="optionB">Option B</label>
+                <input type="text" id="optionB" th:field="*{optionB}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="optionC">Option C</label>
+                <input type="text" id="optionC" th:field="*{optionC}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="optionD">Option D</label>
+                <input type="text" id="optionD" th:field="*{optionD}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="correctAnswer">Correct Option</label>
+                <select id="correctAnswer" th:field="*{correctAnswer}" required>
+                    <option value="A">Option A</option>
+                    <option value="B">Option B</option>
+                    <option value="C">Option C</option>
+                    <option value="D">Option D</option>
+                </select>
+            </div>
+
+            <div class="action-buttons">
+                <a th:href="@{'/teacher/quizzes/' + ${question.quiz.id} + '/questions'}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

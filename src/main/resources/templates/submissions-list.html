@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Exam Portal - Submissions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f6;
+            color: #333;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .header-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .header-area h2 {
+            color: #1e3c72;
+            font-size: 28px;
+        }
+        .btn-back {
+            background: #e2e8f0;
+            color: #4a5568;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            background: #cbd5e0;
+        }
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th, td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #edf2f7;
+        }
+        th {
+            background-color: #f7fafc;
+            color: #4a5568;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover td {
+            background-color: #fcfdfd;
+        }
+        .student-info {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .student-email {
+            font-size: 12px;
+            color: #718096;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-pass {
+            background-color: #c6f6d5;
+            color: #22543d;
+        }
+        .badge-fail {
+            background-color: #fed7d7;
+            color: #742a2a;
+        }
+        .btn-view {
+            display: inline-block;
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-view:hover {
+            background-color: #bee3f8;
+        }
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <a th:href="@{/dashboard}"><h1>🎓 Online Exam Portal</h1></a>
+</div>
+
+<div class="container">
+    <div class="header-area">
+        <h2 th:text="${currentUser.role == T(com.oep.online_examination_portal.entity.Role).TEACHER ? 'Student Exam Submissions' : 'Your Exam History'}">Submissions</h2>
+        <a th:href="@{/dashboard}" class="btn-back">Back to Dashboard</a>
+    </div>
+
+    <div class="table-container">
+        <table th:unless="${submissions.empty}">
+            <thead>
+            <tr>
+                <th th:if="${currentUser.role == T(com.oep.online_examination_portal.entity.Role).TEACHER}">Student</th>
+                <th>Quiz</th>
+                <th>Score</th>
+                <th>Accuracy</th>
+                <th>Date &amp; Time</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sub : ${submissions}">
+                <td th:if="${currentUser.role == T(com.oep.online_examination_portal.entity.Role).TEACHER}">
+                    <div class="student-info" th:text="${sub.student.firstName + ' ' + sub.student.lastName}">Student Name</div>
+                    <div class="student-email" th:text="${sub.student.email}">student@email.com</div>
+                </td>
+                <td style="font-weight: 600;" th:text="${sub.quiz.title}">Quiz Title</td>
+                <td style="font-weight: 700; color: #1e3c72;" th:text="${#numbers.formatDecimal(sub.score, 1, 1) + '%'}">0.0%</td>
+                <td th:text="${sub.correctAnswers + ' / ' + sub.totalQuestions}">0 / 0</td>
+                <td th:text="${#temporals.format(sub.submissionDate, 'dd-MM-yyyy HH:mm')}">Date</td>
+                <td>
+                    <span th:classappend="${sub.passed} ? 'badge badge-pass' : 'badge badge-fail'" th:text="${sub.passed ? 'PASS' : 'FAIL'}">PASS</span>
+                </td>
+                <td>
+                    <a th:href="@{'/submissions/' + ${sub.id}}" class="btn-view">🔍 View Details</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${submissions.empty}" class="no-data">
+            <h3 th:text="${currentUser.role == T(com.oep.online_examination_portal.entity.Role).TEACHER ? 'No submissions have been made yet.' : 'You haven\'t attempted any exams yet.'}">No data</h3>
+            <p style="margin-top: 10px;" th:if="${currentUser.role == T(com.oep.online_examination_portal.entity.Role).STUDENT}">Go to "Available Quizzes" to take your first exam!</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Exam Portal - Result</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f6;
+            color: #333;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px 60px 20px;
+        }
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            border-top: 6px solid #1e3c72;
+            position: relative;
+            overflow: hidden;
+        }
+        .badge {
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        .badge-pass {
+            background-color: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #c6f6d5;
+        }
+        .badge-fail {
+            background-color: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fed7d7;
+        }
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 6px solid #e2e8f0;
+        }
+        .score-circle-pass {
+            border-color: #48bb78;
+        }
+        .score-circle-fail {
+            border-color: #f56565;
+        }
+        .score-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #2d3748;
+        }
+        .score-label {
+            font-size: 12px;
+            color: #718096;
+            font-weight: 600;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 400px;
+            margin: 25px auto 0 auto;
+            border-top: 1px solid #edf2f7;
+            padding-top: 20px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-num {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        .stat-title {
+            font-size: 12px;
+            color: #718096;
+            margin-top: 4px;
+        }
+        .breakdown-title {
+            font-size: 22px;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .question-item {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            border: 1px solid #edf2f7;
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+        .question-text {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+        .q-badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .q-badge-correct {
+            background-color: #c6f6d5;
+            color: #22543d;
+        }
+        .q-badge-incorrect {
+            background-color: #fed7d7;
+            color: #742a2a;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .option-box {
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .option-selected-correct {
+            background-color: #f0fff4;
+            border-color: #c6f6d5;
+            color: #22543d;
+            font-weight: 600;
+        }
+        .option-selected-incorrect {
+            background-color: #fff5f5;
+            border-color: #fed7d7;
+            color: #742a2a;
+            font-weight: 600;
+        }
+        .option-correct-answer {
+            background-color: #f0fff4;
+            border-color: #c6f6d5;
+            color: #22543d;
+            font-weight: 600;
+        }
+        .action-area {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .btn-action {
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <a th:href="@{/dashboard}"><h1>🎓 Online Exam Portal</h1></a>
+</div>
+
+<div class="container">
+    <div class="result-card">
+        <div th:classappend="${submission.passed} ? 'badge badge-pass' : 'badge badge-fail'" th:text="${submission.passed ? 'PASSED' : 'FAILED'}">PASSED</div>
+        
+        <div class="score-circle" th:classappend="${submission.passed} ? 'score-circle-pass' : 'score-circle-fail'">
+            <div class="score-value" th:text="${#numbers.formatDecimal(submission.score, 1, 1) + '%'}">100%</div>
+            <div class="score-label">FINAL SCORE</div>
+        </div>
+
+        <h2 th:text="${submission.quiz.title}">Quiz Title</h2>
+        <p style="color: #666; margin-top: 5px;" th:text="${'Submitted on ' + #temporals.format(submission.submissionDate, 'dd-MM-yyyy HH:mm')}">Submitted on date</p>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-num" th:text="${submission.correctAnswers + ' / ' + submission.totalQuestions}">5 / 5</div>
+                <div class="stat-title">Correct Answers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num" th:text="${submission.quiz.passPercentage + '%'}">60%</div>
+                <div class="stat-title">Required to Pass</div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h3 class="breakdown-title">Question Analysis</h3>
+        
+        <div th:each="userAnswer, iter : ${submission.userAnswers}" class="question-item">
+            <div class="question-header">
+                <div class="question-text" th:text="${'Q' + (iter.index + 1) + '. ' + userAnswer.question.content}">Question Content</div>
+                <span th:classappend="${userAnswer.correct} ? 'q-badge q-badge-correct' : 'q-badge q-badge-incorrect'" th:text="${userAnswer.correct ? 'Correct' : 'Incorrect'}">Correct</span>
+            </div>
+
+            <div class="options-list">
+                <!-- Option A -->
+                <div class="option-box" 
+                     th:classappend="${userAnswer.selectedAnswer == 'A' && userAnswer.correct ? 'option-selected-correct' : 
+                                      (userAnswer.selectedAnswer == 'A' && !userAnswer.correct ? 'option-selected-incorrect' : 
+                                      (userAnswer.question.correctAnswer == 'A' ? 'option-correct-answer' : ''))}">
+                    <span th:text="${'A. ' + userAnswer.question.optionA}">Option A</span>
+                    <span th:if="${userAnswer.selectedAnswer == 'A'}">👈 Your Answer</span>
+                    <span th:if="${userAnswer.question.correctAnswer == 'A' && userAnswer.selectedAnswer != 'A'}">✓ Correct Answer</span>
+                </div>
+                <!-- Option B -->
+                <div class="option-box" 
+                     th:classappend="${userAnswer.selectedAnswer == 'B' && userAnswer.correct ? 'option-selected-correct' : 
+                                      (userAnswer.selectedAnswer == 'B' && !userAnswer.correct ? 'option-selected-incorrect' : 
+                                      (userAnswer.question.correctAnswer == 'B' ? 'option-correct-answer' : ''))}">
+                    <span th:text="${'B. ' + userAnswer.question.optionB}">Option B</span>
+                    <span th:if="${userAnswer.selectedAnswer == 'B'}">👈 Your Answer</span>
+                    <span th:if="${userAnswer.question.correctAnswer == 'B' && userAnswer.selectedAnswer != 'B'}">✓ Correct Answer</span>
+                </div>
+                <!-- Option C -->
+                <div class="option-box" 
+                     th:classappend="${userAnswer.selectedAnswer == 'C' && userAnswer.correct ? 'option-selected-correct' : 
+                                      (userAnswer.selectedAnswer == 'C' && !userAnswer.correct ? 'option-selected-incorrect' : 
+                                      (userAnswer.question.correctAnswer == 'C' ? 'option-correct-answer' : ''))}">
+                    <span th:text="${'C. ' + userAnswer.question.optionC}">Option C</span>
+                    <span th:if="${userAnswer.selectedAnswer == 'C'}">👈 Your Answer</span>
+                    <span th:if="${userAnswer.question.correctAnswer == 'C' && userAnswer.selectedAnswer != 'C'}">✓ Correct Answer</span>
+                </div>
+                <!-- Option D -->
+                <div class="option-box" 
+                     th:classappend="${userAnswer.selectedAnswer == 'D' && userAnswer.correct ? 'option-selected-correct' : 
+                                      (userAnswer.selectedAnswer == 'D' && !userAnswer.correct ? 'option-selected-incorrect' : 
+                                      (userAnswer.question.correctAnswer == 'D' ? 'option-correct-answer' : ''))}">
+                    <span th:text="${'D. ' + userAnswer.question.optionD}">Option D</span>
+                    <span th:if="${userAnswer.selectedAnswer == 'D'}">👈 Your Answer</span>
+                    <span th:if="${userAnswer.question.correctAnswer == 'D' && userAnswer.selectedAnswer != 'D'}">✓ Correct Answer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-area">
+        <a th:href="@{/dashboard}" class="btn-action btn-secondary">Go to Dashboard</a>
+        <a th:href="@{/quizzes}" class="btn-action btn-primary">Take Another Exam</a>
+    </div>
+</div>
+</body>
+</html>
