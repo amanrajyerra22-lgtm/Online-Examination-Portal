@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AlertCircle, Save, ArrowLeft } from 'lucide-react';
 
-export const QuizForm: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+export const QuizForm = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = !!id;
 
@@ -16,7 +16,7 @@ export const QuizForm: React.FC = () => {
   
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(isEditMode);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!isEditMode) return;
@@ -45,7 +45,7 @@ export const QuizForm: React.FC = () => {
     fetchQuizDetails();
   }, [id, isEditMode]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e) => {
     const value = e.target.name === 'timeLimitInMinutes' || e.target.name === 'passPercentage'
       ? parseFloat(e.target.value)
       : e.target.value;
@@ -56,7 +56,7 @@ export const QuizForm: React.FC = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);

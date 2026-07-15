@@ -1,26 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export interface User {
-  id: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: 'STUDENT' | 'TEACHER' | 'ADMIN';
-}
+const AuthContext = createContext(null);
 
-interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  login: (credentials: Record<string, string>) => Promise<User>;
-  logout: () => Promise<void>;
-  register: (userDetails: Record<string, any>) => Promise<void>;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchCurrentUser = async () => {
     try {
@@ -42,7 +26,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchCurrentUser();
   }, []);
 
-  const login = async (credentials: Record<string, string>) => {
+  const login = async (credentials) => {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -67,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const register = async (userDetails: Record<string, any>) => {
+  const register = async (userDetails) => {
     const response = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -1,58 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { AlertCircle, Search, Edit3, Trash2, Shield, Users, Award, ClipboardList, RefreshCw, X, Calendar, Save, ListChecks, Plus, BookOpen } from 'lucide-react';
+import { AlertCircle, Search, Edit3, Trash2, Shield, Users, Award, ClipboardList, RefreshCw, X, Calendar, Save, Plus, BookOpen } from 'lucide-react';
 
-interface UserSummary {
-  id: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: 'STUDENT' | 'TEACHER' | 'ADMIN';
-}
-
-interface UserStats {
-  totalUsers: number;
-  totalStudents: number;
-  totalTeachers: number;
-  totalAdmins: number;
-  totalQuizzes: number;
-  totalSubmissions: number;
-  passRate: number;
-}
-
-interface UserSubmission {
-  id: number;
-  score: number;
-  totalQuestions: number;
-  correctAnswers: number;
-  passed: boolean;
-  submissionDate: string;
-  quizTitle: string;
-}
-
-export const AdminDashboard: React.FC = () => {
+export const AdminDashboard = () => {
   const { user: currentUser } = useAuth();
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState<'users' | 'quizzes'>('users');
-  const [quizzes, setQuizzes] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState('users');
+  const [quizzes, setQuizzes] = useState([]);
   const [quizzesLoading, setQuizzesLoading] = useState(false);
   const [quizSearchTerm, setQuizSearchTerm] = useState('');
-  const [quizDeleteTarget, setQuizDeleteTarget] = useState<any | null>(null);
+  const [quizDeleteTarget, setQuizDeleteTarget] = useState(null);
   const [quizDeleting, setQuizDeleting] = useState(false);
 
-  const [stats, setStats] = useState<UserStats | null>(null);
-  const [users, setUsers] = useState<UserSummary[]>([]);
+  const [stats, setStats] = useState(null);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   // Search & Filter state
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
 
   // Modals state
-  const [editingUser, setEditingUser] = useState<UserSummary | null>(null);
+  const [editingUser, setEditingUser] = useState(null);
   const [editFormData, setEditFormData] = useState({
     firstName: '',
     lastName: '',
@@ -60,14 +32,14 @@ export const AdminDashboard: React.FC = () => {
     role: 'STUDENT',
     password: '',
   });
-  const [editError, setEditError] = useState<string | null>(null);
+  const [editError, setEditError] = useState(null);
   const [editSaving, setEditSaving] = useState(false);
 
-  const [scoreUser, setScoreUser] = useState<UserSummary | null>(null);
-  const [scoreList, setScoreList] = useState<UserSubmission[]>([]);
+  const [scoreUser, setScoreUser] = useState(null);
+  const [scoreList, setScoreList] = useState([]);
   const [scoreLoading, setScoreLoading] = useState(false);
 
-  const [deleteTarget, setDeleteTarget] = useState<UserSummary | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
   const fetchStats = async () => {
@@ -141,7 +113,7 @@ export const AdminDashboard: React.FC = () => {
     loadData();
   }, []);
 
-  const handleEditClick = (u: UserSummary) => {
+  const handleEditClick = (u) => {
     setEditingUser(u);
     setEditFormData({
       firstName: u.firstName || '',
@@ -153,14 +125,14 @@ export const AdminDashboard: React.FC = () => {
     setEditError(null);
   };
 
-  const handleEditSave = async (e: React.FormEvent) => {
+  const handleEditSave = async (e) => {
     e.preventDefault();
     if (!editingUser) return;
     setEditSaving(true);
     setEditError(null);
 
     // Filter out blank password
-    const payload: Record<string, string> = {
+    const payload = {
       firstName: editFormData.firstName,
       lastName: editFormData.lastName,
       email: editFormData.email,
@@ -193,7 +165,7 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
-  const handleScoreClick = async (u: UserSummary) => {
+  const handleScoreClick = async (u) => {
     setScoreUser(u);
     setScoreLoading(true);
     setScoreList([]);
@@ -233,7 +205,7 @@ export const AdminDashboard: React.FC = () => {
     }
   };
 
-  const formatDate = (dateStr: string) => {
+  const formatDate = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
     return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
@@ -665,7 +637,7 @@ export const AdminDashboard: React.FC = () => {
               <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>Loading submissions...</div>
             ) : scoreList.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
-                <ListChecks size={32} style={{ color: 'var(--text-muted)', marginBottom: '0.5rem' }} />
+                <Plus size={32} style={{ color: 'var(--text-muted)', marginBottom: '0.5rem' }} />
                 <p>This student hasn't submitted any exams yet.</p>
               </div>
             ) : (

@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { AlertCircle, UserPlus } from 'lucide-react';
 
-export const Register: React.FC = () => {
+export const Register = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
   
@@ -14,17 +14,17 @@ export const Register: React.FC = () => {
     lastName: '',
     role: 'STUDENT',
   });
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
@@ -32,7 +32,7 @@ export const Register: React.FC = () => {
     try {
       await register(formData);
       navigate('/login', { state: { registered: true } });
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message || 'Registration failed. Try again.');
     } finally {
       setLoading(false);

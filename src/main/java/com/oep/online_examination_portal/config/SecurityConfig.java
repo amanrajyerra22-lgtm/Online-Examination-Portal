@@ -32,6 +32,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/teacher/**").hasAnyRole("TEACHER", "ADMIN")
+                .requestMatchers("/api/quizzes/teacher/**").hasAnyRole("TEACHER", "ADMIN")
+                .requestMatchers("/api/submissions/teacher").hasAnyRole("TEACHER", "ADMIN")
                 .requestMatchers("/api/**").authenticated()
                 .requestMatchers("/teacher/**").hasRole("TEACHER")
                 .anyRequest().permitAll() // Permit all other requests so React frontend routing works

@@ -2,22 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Edit3, Trash2, HelpCircle, AlertCircle, Clock, ListChecks } from 'lucide-react';
 
-interface Quiz {
-  id: number;
-  title: string;
-  description: string;
-  timeLimitInMinutes: number;
-  passPercentage: number;
-  questionCount: number;
-}
-
-export const TeacherQuizzes: React.FC = () => {
+export const TeacherQuizzes = () => {
   const navigate = useNavigate();
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   
-  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
   const fetchQuizzes = async () => {

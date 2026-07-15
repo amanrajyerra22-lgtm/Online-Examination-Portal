@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, ClipboardList, Shield, Users, BarChart3, Star, Award, CheckCircle } from 'lucide-react';
 
-export const Dashboard: React.FC = () => {
+export const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   
@@ -24,8 +24,8 @@ export const Dashboard: React.FC = () => {
           if (res.ok) {
             const data = await res.json();
             const total = data.length;
-            const avg = total > 0 ? data.reduce((acc: number, cur: any) => acc + cur.score, 0) / total : 0;
-            const passed = data.filter((item: any) => item.passed).length;
+            const avg = total > 0 ? data.reduce((acc, cur) => acc + cur.score, 0) / total : 0;
+            const passed = data.filter((item) => item.passed).length;
             setStudentStats({ taken: total, avgScore: Math.round(avg), passed });
           }
         } else if (user.role === 'TEACHER') {

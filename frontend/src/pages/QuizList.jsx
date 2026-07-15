@@ -2,23 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertCircle, Clock, CheckSquare, User, BookOpen } from 'lucide-react';
 
-interface Quiz {
-  id: number;
-  title: string;
-  description: string;
-  timeLimitInMinutes: number;
-  passPercentage: number;
-  questionCount: number;
-  createdBy: string;
-  attempted?: boolean;
-  submissionId?: number;
-}
-
-export const QuizList: React.FC = () => {
+export const QuizList = () => {
   const navigate = useNavigate();
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchQuizzes = async () => {

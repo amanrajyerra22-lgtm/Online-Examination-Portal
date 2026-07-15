@@ -2,37 +2,19 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AlertCircle, Clock, AlertTriangle, ChevronRight } from 'lucide-react';
 
-interface Question {
-  id: number;
-  content: string;
-  optionA: string;
-  optionB: string;
-  optionC: string;
-  optionD: string;
-  marks?: number;
-}
-
-interface Quiz {
-  id: number;
-  title: string;
-  description: string;
-  timeLimitInMinutes: number;
-  questions: Question[];
-}
-
-export const TakeQuiz: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+export const TakeQuiz = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   
-  const [quiz, setQuiz] = useState<Quiz | null>(null);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [quiz, setQuiz] = useState(null);
+  const [answers, setAnswers] = useState({});
+  const [timeLeft, setTimeLeft] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   
-  const timerRef = useRef<any>(null);
+  const timerRef = useRef(null);
   const autoSubmitTriggered = useRef(false);
 
   useEffect(() => {
@@ -73,7 +55,7 @@ export const TakeQuiz: React.FC = () => {
     timerRef.current = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
-          clearInterval(timerRef.current!);
+          clearInterval(timerRef.current);
           if (!autoSubmitTriggered.current) {
             autoSubmitTriggered.current = true;
             submitQuizAttempt(true); // Auto submit
@@ -89,19 +71,19 @@ export const TakeQuiz: React.FC = () => {
     };
   }, [loading, quiz, timeLeft]);
 
-  const selectOption = (questionId: number, option: string) => {
+  const selectOption = (questionId, option) => {
     setAnswers((prev) => ({
       ...prev,
       [questionId]: option,
     }));
   };
 
-  const submitQuizAttempt = async (isAuto: boolean = false) => {
+  const submitQuizAttempt = async (isAuto = false) => {
     setSubmitting(true);
     setShowConfirmModal(false);
 
     // Format answers map for backend
-    const formattedAnswers: Record<string, string> = {};
+    const formattedAnswers = {};
     if (quiz) {
       quiz.questions.forEach((q) => {
         formattedAnswers[`question_${q.id}`] = answers[q.id] || '';
@@ -128,7 +110,7 @@ export const TakeQuiz: React.FC = () => {
     }
   };
 
-  const formatTime = (seconds: number) => {
+  const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;

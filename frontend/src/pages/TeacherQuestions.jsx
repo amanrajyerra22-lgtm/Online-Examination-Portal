@@ -2,34 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, AlertCircle, Edit2, Trash2, HelpCircle, Save, X, Check } from 'lucide-react';
 
-interface Question {
-  id: number;
-  content: string;
-  optionA: string;
-  optionB: string;
-  optionC: string;
-  optionD: string;
-  correctAnswer: string;
-  marks: number;
-}
-
-interface Quiz {
-  id: number;
-  title: string;
-  description: string;
-}
-
-export const TeacherQuestions: React.FC = () => {
-  const { quizId } = useParams<{ quizId: string }>();
+export const TeacherQuestions = () => {
+  const { quizId } = useParams();
   const navigate = useNavigate();
 
-  const [quiz, setQuiz] = useState<Quiz | null>(null);
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [quiz, setQuiz] = useState(null);
+  const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   // Form states (for Add & Edit)
-  const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
+  const [editingQuestion, setEditingQuestion] = useState(null);
   const [formData, setFormData] = useState({
     content: '',
     optionA: '',
@@ -40,7 +23,7 @@ export const TeacherQuestions: React.FC = () => {
     marks: 1.0,
   });
   const [formLoading, setFormLoading] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [formError, setFormError] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -68,7 +51,7 @@ export const TeacherQuestions: React.FC = () => {
     fetchData();
   }, [quizId]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (e) => {
     const value = e.target.name === 'marks' ? parseFloat(e.target.value) : e.target.value;
     setFormData({
       ...formData,
@@ -90,7 +73,7 @@ export const TeacherQuestions: React.FC = () => {
     setFormError(null);
   };
 
-  const handleEditClick = (q: Question) => {
+  const handleEditClick = (q) => {
     setEditingQuestion(q);
     setFormData({
       content: q.content,
@@ -103,7 +86,7 @@ export const TeacherQuestions: React.FC = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
     setFormLoading(true);
@@ -139,7 +122,7 @@ export const TeacherQuestions: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this question?')) return;
     
     try {

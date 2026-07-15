@@ -3,27 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { AlertCircle, Search, Calendar, Eye, ClipboardList } from 'lucide-react';
 
-interface SubmissionSummary {
-  id: number;
-  score: number;
-  totalQuestions: number;
-  correctAnswers: number;
-  passed: boolean;
-  submissionDate: string;
-  studentId?: number;
-  studentName?: string;
-  studentEmail?: string;
-  quizId: number;
-  quizTitle: string;
-}
-
-export const SubmissionsList: React.FC = () => {
+export const SubmissionsList = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [submissions, setSubmissions] = useState<SubmissionSummary[]>([]);
+  const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   
   // Search & Filter state
   const [searchTerm, setSearchTerm] = useState('');
@@ -39,7 +25,7 @@ export const SubmissionsList: React.FC = () => {
         if (res.ok) {
           const data = await res.json();
           // Sort by date descending
-          data.sort((a: any, b: any) => new Date(b.submissionDate).getTime() - new Date(a.submissionDate).getTime());
+          data.sort((a, b) => new Date(b.submissionDate).getTime() - new Date(a.submissionDate).getTime());
           setSubmissions(data);
         } else {
           setError('Failed to retrieve submissions logs.');
@@ -56,7 +42,7 @@ export const SubmissionsList: React.FC = () => {
 
   if (!user) return null;
 
-  const formatDate = (dateStr: string) => {
+  const formatDate = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
     return date.toLocaleDateString(undefined, { 

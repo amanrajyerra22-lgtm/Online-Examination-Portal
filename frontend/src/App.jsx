@@ -15,7 +15,7 @@ import { TeacherQuestions } from './pages/TeacherQuestions';
 import { AdminDashboard } from './pages/AdminDashboard';
 
 // Route guards
-const PrivateRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({ children, allowedRoles }) => {
+const PrivateRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -37,7 +37,7 @@ const PrivateRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[
   return <>{children}</>;
 };
 
-const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const PublicRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -55,7 +55,7 @@ const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <>{children}</>;
 };
 
-const AppContent: React.FC = () => {
+const AppContent = () => {
   return (
     <div className="app-container">
       <Navbar />

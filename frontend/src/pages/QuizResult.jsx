@@ -2,45 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Check, X, AlertCircle, RefreshCw, Home, Calendar, ThumbsUp, ThumbsDown } from 'lucide-react';
 
-interface UserAnswer {
-  id: number;
-  selectedAnswer: string;
-  isCorrect: boolean;
-  questionId: number;
-  questionContent: string;
-  optionA: string;
-  optionB: string;
-  optionC: string;
-  optionD: string;
-  correctAnswer: string;
-  marks?: number;
-}
-
-interface Submission {
-  id: number;
-  score: number;
-  totalQuestions: number;
-  correctAnswers: number;
-  passed: boolean;
-  submissionDate: string;
-  studentName: string;
-  studentEmail: string;
-  quizTitle: string;
-  quizId: number;
-  userAnswers: UserAnswer[];
-}
-
-export const QuizResult: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+export const QuizResult = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [submission, setSubmission] = useState<Submission | null>(null);
+  const [submission, setSubmission] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   // Check state from location (justSubmitted, autoSubmitted)
-  const state = location.state as { justSubmitted?: boolean; autoSubmitted?: boolean } | null;
+  const state = location.state;
 
   useEffect(() => {
     const fetchSubmission = async () => {
@@ -84,7 +56,7 @@ export const QuizResult: React.FC = () => {
 
   if (!submission) return null;
 
-  const formatDate = (dateStr: string) => {
+  const formatDate = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
     return date.toLocaleDateString(undefined, { 
