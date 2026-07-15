@@ -1,6 +1,6 @@
-# 🎓 Online Examination Portal
+# 🎓 VidyaSetu - Bridge to Knowledge
 
-A full-stack web application for conducting online examinations with role-based access for **Students**, **Teachers**, and **Administrators**. The system allows teachers to create and manage quizzes, students to take exams and view results, and administrators to manage users and monitor the platform.
+A full-stack web application for conducting online examinations with role-based access for **Students**, **Teachers**, and **Administrators**. The system allows teachers to create and manage quizzes, students to take exams and view results, and administrators to manage users and monitor the platform. VidyaSetu bridges the gap between learning and evaluation.
 
 ---
 

@@ -73,7 +73,7 @@ export const Dashboard = () => {
       </div>
 
       <div style={{ marginBottom: '2.5rem' }}>
-        <h2 style={{ fontSize: '2.2rem', fontWeight: 800, fontFamily: 'var(--font-display)' }}>Dashboard</h2>
+        <h2 style={{ fontSize: '2.2rem', fontWeight: 800, fontFamily: 'var(--font-display)' }}>VidyaSetu Dashboard</h2>
         <p style={{ color: 'var(--text-secondary)' }}>Manage your examinations, check results, and track progress here.</p>
       </div>
 

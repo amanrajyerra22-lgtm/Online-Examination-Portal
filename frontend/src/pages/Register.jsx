@@ -42,8 +42,8 @@ export const Register = () => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
       <div className="form-card" style={{ maxWidth: '520px' }}>
-        <h1 className="form-title">Create Account</h1>
-        <p className="form-subtitle">Register to begin taking exams or managing quizzes</p>
+        <h1 className="form-title">Create VidyaSetu Account</h1>
+        <p className="form-subtitle">Bridge to Knowledge</p>
 
         {error && (
           <div className="alert alert-danger">

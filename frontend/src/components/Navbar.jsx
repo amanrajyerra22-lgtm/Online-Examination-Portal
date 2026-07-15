@@ -22,7 +22,7 @@ export const Navbar = () => {
       <div className="nav-inner">
         <div className="nav-brand" onClick={() => navigate('/dashboard')}>
           <Award size={28} style={{ color: '#a855f7' }} />
-          <span>ExamPortal</span>
+          <span>VidyaSetu</span>
         </div>
 
         <nav className="nav-items">

@@ -29,8 +29,8 @@ export const Login = () => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
       <div className="form-card">
-        <h1 className="form-title">Portal Sign In</h1>
-        <p className="form-subtitle">Access your online examination profile</p>
+        <h1 className="form-title">VidyaSetu</h1>
+        <p className="form-subtitle">Bridge to Knowledge</p>
 
         {error && (
           <div className="alert alert-danger">

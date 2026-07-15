@@ -13,6 +13,7 @@ import { TeacherQuizzes } from './pages/TeacherQuizzes';
 import { QuizForm } from './pages/QuizForm';
 import { TeacherQuestions } from './pages/TeacherQuestions';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { Footer } from './components/Footer';
 
 // Route guards
 const PrivateRoute = ({ children, allowedRoles }) => {
@@ -86,6 +87,7 @@ const AppContent = () => {
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
+      <Footer />
     </div>
   );
 };
