@@ -115,7 +115,7 @@ export const SubmissionsList = () => {
                   className="form-control form-select"
                   value={passedFilter}
                   onChange={(e) => setPassedFilter(e.target.value)}
-                >
+                 >
                   <option value="all">All Results</option>
                   <option value="passed">Passed Attempts</option>
                   <option value="failed">Failed Attempts</option>
